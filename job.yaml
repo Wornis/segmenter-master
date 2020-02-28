@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: $JOB_ID
+spec:
+  completions: 6
+  parallelism: 6
+  activeDeadlineSeconds: 900 # 15 Minutes
+  template:
+    metadata:
+      name: $JOB_ID
+    spec:
+      serviceAccountName: k8s-101-role
+      containers:
+        - name: segmenter-worker
+          image: gcr.io/ad4screen-us/segmenter-worker:latest
+          env:
+            - name: JOB_ID
+              value: '$JOB_ID'
+          resources:
+            requests:
+              cpu: "95"
+      restartPolicy: OnFailure
+      nodeSelector:
+        cloud.google.com/gke-nodepool: high-cpu-pool
+      tolerations:
+        - key: "worker"
+          operator: "Equal"
+          value: "segmenter"
+          effect: "NoSchedule"
