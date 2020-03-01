@@ -19,7 +19,7 @@ spec:
               value: '$JOB_ID'
           resources:
             requests:
-              cpu: "95"
+              cpu: "96"
       restartPolicy: OnFailure
       nodeSelector:
         cloud.google.com/gke-nodepool: high-cpu-pool
