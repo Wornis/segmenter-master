@@ -15,7 +15,8 @@
     "eslint-plugin-react-hooks": "^1.7.0"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "latest",
+    "@google-cloud/pubsub": "^1.5.0",
+    "axios": "^0.19.2",
     "joi": "^10.6.0"
   },
   "author": "",
