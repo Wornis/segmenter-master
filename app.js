@@ -55,17 +55,16 @@ const handleHighVMS = async () => {
   const segmenterJobs = (await exec('kubectl get jobs'))
     .split(' ')
     .filter((v) => v.includes('segmenter-master'));
-  if (segmenterJobs.length > 1) { await resizeNodePool(); }
+  if (segmenterJobs.length === 1) { await resizeNodePool(); }
 };
 
 const manageJob = async (body) => {
   const uniqueKey = `${Math.random().toString(36).substr(2, 9)}`;
-  const jobId = `segmenter-master-${uniqueKey}`;
+  const jobId = `segmenter-worker-${uniqueKey}`;
   const topic = pubsub.topic(jobId);
   const payload = checkBody(body);
-  const bufData = getBufData(payload, uniqueKey);
 
-  await createTopicAndPublish(topic, jobId, bufData);
+  await createTopicAndPublish(topic, jobId, getBufData(payload, uniqueKey));
   await launchJob(jobId);
   await waitEndOfJob(jobId);
   await deleteTopic(topic, jobId);

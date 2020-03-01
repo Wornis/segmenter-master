@@ -1,0 +1,28 @@
+steps:
+  #Will pull the production image for using his layers for a faster build
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Pull latest image'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest || exit 0'
+    ]
+
+  # This step builds the container image and tag them.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+      - '--cache-from'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+      - '.'
+
+# Push images to Google Container Registry with tags
+images: [
+  'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA',
+  'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+]

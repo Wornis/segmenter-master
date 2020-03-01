@@ -4,11 +4,6 @@
     <list default="true" id="c6a209e9-1f29-45db-9339-514a48e467b6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.bin/compileProtos" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/compileProtos" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.yarn-integrity" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.yarn-integrity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/csv-merger.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/csv-merger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,10 +23,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="10.10.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/utils" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -47,8 +43,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/utils" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/utils" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -78,6 +74,9 @@
       <workItem from="1583024584582" duration="84000" />
       <workItem from="1583024866436" duration="1903000" />
       <workItem from="1583026781613" duration="46000" />
+      <workItem from="1583027288107" duration="802000" />
+      <workItem from="1583063606704" duration="227000" />
+      <workItem from="1583070360487" duration="1809000" />
     </task>
     <servers />
   </component>
@@ -85,6 +84,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="771" y="281" width="424" height="479" key="FileChooserDialogImpl" timestamp="1583071728502">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="771" y="281" width="424" height="479" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1583071728502" />
     <state width="1818" height="274" key="GridCell.Tab.0.bottom" timestamp="1583026769652">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
