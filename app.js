@@ -30,7 +30,7 @@ const getBufData = ({ appId, getters, filters }, uniqueKey) => RANGES(NB_RANGES)
 
 const createTopicAndPublish = async (topic, jobId, bufData) => {
   await topic.create();
-  await topic.createSubscription(jobId, { ackDeadlineSeconds: 600 });
+  await topic.createSubscription(jobId, { ackDeadlineSeconds: 20 });
   await Promise.all(bufData.map((msg) => topic.publish(msg)));
 };
 

@@ -25,7 +25,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@google-cloud/container@latest":
+"@google-cloud/container@^1.6.2":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@google-cloud/container/-/container-1.6.2.tgz#662110d64098b1ef12c3bc5c9c922d1e51330e7c"
   integrity sha512-GMy5NbVJHN4piulkmoEJjVz7zdJW6n0S2RopWyHy2Azk48iegEPaJM4Jvj+FxtfufCT+i0m5UzE/e3AApCVgzA==
