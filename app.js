@@ -4,6 +4,9 @@ const exec = require('./utils/execBash');
 const RANGES = require('./utils/getRanges');
 const { resizeNodePool } = require('./utils/resizeNodePool');
 const { createFinalCSV } = require('./utils/csv-merger');
+const { doesFilterExist } = require('./utils/check-filter');
+const defaultFilters = require('./utils/default-filters');
+const { getParams } = require('./utils/parameters');
 
 const NB_RANGES = 570;
 
@@ -17,9 +20,16 @@ const testBody = {
   queueId: '4',
 };
 
+const checkFilters = (filters) => {
+  const erroredFilters = filters.filter((filter) => (!doesFilterExist(filter)));
+  if (erroredFilters.length) throw new Error('Filters are invalid.');
+};
+
 const checkBody = (body) => {
   const { error, value } = require('./utils/validateBody')(body);
+  value.filters = [...value.filters, ...defaultFilters];
   if (error) throw new Error(error);
+  checkFilters(value.filters);
   return value;
 };
 
@@ -30,7 +40,7 @@ const getBufData = ({ appId, getters, filters }, uniqueKey) => RANGES(NB_RANGES)
 
 const createTopicAndPublish = async (topic, jobId, bufData) => {
   await topic.create();
-  await topic.createSubscription(jobId, { ackDeadlineSeconds: 20 });
+  await topic.createSubscription(jobId, { ackDeadlineSeconds: 15 });
   await Promise.all(bufData.map((msg) => topic.publish(msg)));
 };
 
@@ -52,7 +62,7 @@ const deleteTopic = async (topic, jobId) => {
 };
 
 const handleHighVMS = async () => {
-  const segmenterJobs = (await exec('kubectl get jobs'))
+  const segmenterJobs = (await exec('kubectl get jobs -o custom-columns=NAME:.metadata.name'))
     .split(' ')
     .filter((v) => v.includes('segmenter-master'));
   if (segmenterJobs.length === 1) { await resizeNodePool(); }
@@ -63,13 +73,13 @@ const manageJob = async (body) => {
   const jobId = `segmenter-worker-${uniqueKey}`;
   const topic = pubsub.topic(jobId);
   const payload = checkBody(body);
-
-  await createTopicAndPublish(topic, jobId, getBufData(payload, uniqueKey));
-  await launchJob(jobId);
-  await waitEndOfJob(jobId);
-  await deleteTopic(topic, jobId);
-  await createFinalCSV(payload, uniqueKey, NB_RANGES);
-  await handleHighVMS();
+  //const params = await getParams(filters, { appId, extractId, filterVersion });
+  // await createTopicAndPublish(topic, jobId, getBufData(payload, uniqueKey));
+  // await launchJob(jobId);
+  // await waitEndOfJob(jobId);
+  // await deleteTopic(topic, jobId);
+  // await createFinalCSV(payload, uniqueKey, NB_RANGES);
+  // await handleHighVMS();
 };
 
 manageJob(process.env.BODY_FILTER || testBody)
