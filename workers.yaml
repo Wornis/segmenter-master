@@ -6,6 +6,7 @@ spec:
   completions: 6
   parallelism: 6
   activeDeadlineSeconds: 900 # 15 Minutes
+  backoffLimit: 10
   template:
     metadata:
       name: $JOB_ID
@@ -19,7 +20,7 @@ spec:
               value: '$JOB_ID'
           resources:
             requests:
-              cpu: "96"
+              cpu: "95"
       restartPolicy: OnFailure
       nodeSelector:
         cloud.google.com/gke-nodepool: high-cpu-pool

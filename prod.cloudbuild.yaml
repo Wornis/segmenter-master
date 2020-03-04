@@ -5,7 +5,7 @@ steps:
     entrypoint: 'bash'
     args: [
       '-c',
-      'docker pull gcr.io/ad4screen-us/segmenter-master:latest || exit 0'
+      'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest || exit 0'
     ]
 
   # This step builds the container image and tag them.
@@ -14,12 +14,15 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/ad4screen-us/segmenter-master:latest'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
       - '--cache-from'
-      - 'gcr.io/ad4screen-us/segmenter-master:latest'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
       - '.'
 
 # Push images to Google Container Registry with tags
 images: [
-  'gcr.io/ad4screen-us/segmenter-master:latest'
+  'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA',
+  'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
 ]

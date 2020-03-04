@@ -4,7 +4,7 @@ const mysql = require('../lib/mysql');
 //* ***************** UPLIFT **************************
 const getUpliftParams = async ({ appId, extractId, filterVersion }) => ({
   wantedExtractId: filterVersion && filterVersion.extractId ? filterVersion.extractId : extractId,
-  window: (await mysql.pQuery({ sql: 'SELECT * FROM application WHERE id = ?', args: appId }))[0].uplift_window
+  window: (await mysql.pQuery({ sql: 'SELECT * FROM application WHERE id = ?', args: appId }))[0].uplift_window,
 });
 //* ***************************************************
 
@@ -59,9 +59,10 @@ const handleFilter = async (filter, i, extractInfo) => {
   } return { [i]: {} };
 };
 
-const getParams = async (filters, extractInfo) => {
+const getParams = async (extractInfo) => {
+  await mysql.init();
   const params = await Promise.all(
-    filters.map(async (filter, i) => handleFilter(filter, i, extractInfo)),
+    extractInfo.filters.map(async (filter, i) => handleFilter(filter, i, extractInfo)),
   );
   return params.reduce((obj, param) => ({ ...obj, ...param }), {});
 };
