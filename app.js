@@ -2,7 +2,7 @@ const { PubSub } = require('@google-cloud/pubsub');
 const pubsub = new PubSub();
 const exec = require('./utils/execBash');
 const RANGES = require('./utils/getRanges');
-const { resizeNodePool } = require('./utils/resizeNodePool');
+const { handleHighVMS } = require('./utils/resizeNodePool');
 const { createFinalCSV } = require('./utils/csv-merger');
 const defaultFilters = require('./utils/default-filters');
 const { getParams } = require('./utils/parameters');
@@ -10,9 +10,9 @@ const { getParams } = require('./utils/parameters');
 const NB_RANGES = 570;
 
 const testBody = {
-  appId: 161,
+  appId: 156,
   getters: ['idfa'],
-  filters: [{ type: 'has', name: 'hasFrom', opt: { columnFamily: 'op', date: { number: 180, type: 'days' }, value: { event: 'open', days: [] } } }, { type: 'or', filtersToCompare: [{ type: 'gender', name: 'notMatchGender', opt: { columnFamily: 'ev', value: { gender: { name: 'Female', value: 'f' } } } }, { type: 'gender', name: 'notMatchGender', opt: { columnFamily: 'ev', value: { gender: { name: 'Female', value: 'f' } } } }] }],
+  filters: [{ type: 'all-users', name: 'matchAllUsers' }],
   extractType: 'auto',
   extractId: 127,
   bucketName: 'csv_split',
@@ -28,7 +28,7 @@ const checkBody = (body) => {
 
 const getBufData = ({ appId, getters, filters }, params, uniqueKey) => RANGES(NB_RANGES)
   .map(({ end, start }, index) => Buffer.from(JSON.stringify({
-    appId, name: `file_${index}_${uniqueKey}`, start, end, getters, filters, params
+    appId, name: `file_${index}_${uniqueKey}`, start, end, getters, filters, params,
   })));
 
 const createTopicAndPublish = async (topic, jobId, bufData) => {
@@ -54,24 +54,16 @@ const deleteTopic = async (topic, jobId) => {
   await topic.subscription(jobId).delete();
 };
 
-const handleHighVMS = async () => {
-  const segmenterJobs = (await exec('kubectl get jobs -o custom-columns=NAME:.metadata.name'))
-    .split(' ')
-    .filter((v) => v.includes('segmenter-master'));
-  if (segmenterJobs.length === 1) { await resizeNodePool(); }
-};
-
 const manageJob = async (body) => {
-  //const uniqueKey = `${Math.random().toString(36).substr(2, 9)}`;
-  const uniqueKey = 'cmg31zsis'
-  // const jobId = `segmenter-worker-${uniqueKey}`;
-  // const topic = pubsub.topic(jobId);
+  const uniqueKey = `${Math.random().toString(36).substr(2, 9)}`;
+  const jobId = `segmenter-worker-${uniqueKey}`;
+  const topic = pubsub.topic(jobId);
   const payload = checkBody(body);
-  // const params = await getParams(payload);
-  // await createTopicAndPublish(topic, jobId, getBufData(payload, params, uniqueKey));
-  // await launchJob(jobId);
-  // await waitEndOfJob(jobId);
-  // await deleteTopic(topic, jobId);
+  const params = await getParams(payload);
+  await createTopicAndPublish(topic, jobId, getBufData(payload, params, uniqueKey));
+  await launchJob(jobId);
+  await waitEndOfJob(jobId);
+  await deleteTopic(topic, jobId);
   await createFinalCSV(payload, uniqueKey, NB_RANGES);
   await handleHighVMS();
 };

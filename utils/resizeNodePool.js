@@ -24,4 +24,11 @@ const resizeNodePool = async () => client
     } else throw e;
   });
 
-module.exports = { resizeNodePool };
+const handleHighVMS = async () => {
+  const segmenterJobs = (await exec('kubectl get jobs -o custom-columns=NAME:.metadata.name'))
+    .split(' ')
+    .filter((v) => v.includes('segmenter-master'));
+  if (segmenterJobs.length === 1) { await resizeNodePool(); }
+};
+
+module.exports = { handleHighVMS };

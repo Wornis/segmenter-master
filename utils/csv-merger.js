@@ -1,6 +1,6 @@
 const { merger } = require('./merger');
 
-const triggerGCF = async ({
+const mergeFiles = async ({
   final, files, header = '', bucketName, retry = 0,
 }) => {
   await merger({
@@ -9,7 +9,7 @@ const triggerGCF = async ({
     console.error(e);
     if (retry === 8) throw new Error(`After 5 retries, UltimatorMerger return errors: ${e}`);
     await new Promise((resolve) => setTimeout(resolve, 1 + retry * 2000));
-    await triggerGCF({
+    await mergeFiles({
       final, files, header, bucketName, retry,
     });
   });
@@ -21,7 +21,7 @@ exports.createFinalCSV = async ({ bucketName, appId, extractId }, uniqueKey, nbR
   console.log('Start merging files:', final);
   console.time(`End merging ${final}`);
   const files = aFilename.map((filename) => `tmp/${filename}.csv`);
-  await triggerGCF({ final, files, bucketName });
+  await mergeFiles({ final, files, bucketName });
   console.timeEnd(`End merging ${final}`);
   return final;
 };

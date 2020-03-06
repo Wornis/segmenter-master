@@ -7,7 +7,7 @@ const { EOL } = require('os');
 const BATCH_SIZE = 32;
 const MAX_FILES_LENGTH = 31 * BATCH_SIZE; // 31 Batches + header file
 
-const TMP_BUCKET = 'tmp_ultimator';
+const TMP_BUCKET = 'csv_split';
 const tmpBucket = storage.bucket(TMP_BUCKET);
 
 const getAccessToken = async () => {
