@@ -6,6 +6,8 @@ const { handleHighVMS } = require('./utils/resizeNodePool');
 const { createFinalCSV } = require('./utils/csv-merger');
 const defaultFilters = require('./utils/default-filters');
 const { getParams } = require('./utils/parameters');
+const mysql = require('./lib/mysql');
+const { launchNextJob } = require('./utils/launch-next-job')
 
 const NB_RANGES = 570;
 
@@ -59,12 +61,14 @@ const manageJob = async (body) => {
   const jobId = `segmenter-worker-${uniqueKey}`;
   const topic = pubsub.topic(jobId);
   const payload = checkBody(body);
+  await mysql.init();
   const params = await getParams(payload);
   await createTopicAndPublish(topic, jobId, getBufData(payload, params, uniqueKey));
   await launchJob(jobId);
   await waitEndOfJob(jobId);
   await deleteTopic(topic, jobId);
   await createFinalCSV(payload, uniqueKey, NB_RANGES);
+  await launchNextJob();
   await handleHighVMS();
 };
 

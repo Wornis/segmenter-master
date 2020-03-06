@@ -60,7 +60,6 @@ const handleFilter = async (filter, i, extractInfo) => {
 };
 
 const getParams = async (extractInfo) => {
-  await mysql.init();
   const params = await Promise.all(
     extractInfo.filters.map(async (filter, i) => handleFilter(filter, i, extractInfo)),
   );

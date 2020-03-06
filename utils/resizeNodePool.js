@@ -1,5 +1,5 @@
 const container = require('@google-cloud/container');
-
+const exec = require('../utils/execBash');
 const client = new container.v1.ClusterManagerClient({});
 
 const request = {
