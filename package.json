@@ -17,7 +17,7 @@
   "dependencies": {
     "@google-cloud/container": "^1.6.2",
     "@google-cloud/pubsub": "^1.5.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "joi": "^10.6.0",
     "memjs": "^1.2.2",
     "moment": "^2.24.0",
